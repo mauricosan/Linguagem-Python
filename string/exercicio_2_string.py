@@ -5,12 +5,13 @@
 string = input("Digite uma string: ")
 letra = input("Qual letra deseja remover?: ")
 
-nova_string = ""
+new_string = ""
 i = 0
 
 while i < len(string):
     if string[i] != letra:
-        nova_string += string[i]
+        new_string += string[i]
     i += 1
 
-print("String após remoção:", nova_string)
+print(new_string)
+

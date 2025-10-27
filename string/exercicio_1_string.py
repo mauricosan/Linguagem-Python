@@ -1,18 +1,20 @@
 # Escreva um programa que remove a primeira ocorrência de uma letra de
 # uma string. A string e a letra devem ser fornecidas pelo usuário.
 
-string = input("Digite uma string: ")
+
+string = input("Digite uma frase: ")
 letra = input("Qual letra deseja remover?: ")
 
-nova_string = ""
 removida = False
 i = 0
+nova_string = ""
 
 while i < len(string):
     if string[i] == letra and not removida:
-        removida = True   
+        removida = True
     else:
         nova_string += string[i]
-    i += 1
+    i +=1
 
-print("String após remoção:", nova_string)
+print(nova_string)
+
