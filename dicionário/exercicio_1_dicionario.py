@@ -36,3 +36,4 @@ frase = input("Qual frase deseja traduzir para a língua dos piratas?: ")
 
 
 
+

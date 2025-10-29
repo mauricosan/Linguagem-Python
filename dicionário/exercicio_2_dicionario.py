@@ -42,7 +42,7 @@ def incluir_contato(agenda, nome):
     if nome in agenda:
         return  False
     
-    zapzap = []
+    zap = []
     continuar = True
 
     while continuar:
@@ -52,9 +52,9 @@ def incluir_contato(agenda, nome):
             continuar = False
         
         else:
-            zapzap.append(telefone)
+            zap.append(telefone)
 
-    agenda[nome] = zapzap
+    agenda[nome] = zap
     return True
 
 def incluir_telefone(agenda, nome, telefone):
@@ -98,18 +98,18 @@ def consultar_telefone(agenda, nome):
     if nome in agenda:
         print(f"Telefone de {nome} :")
         for i in agenda[nome]:
-            print("--",i)
+            print(i)
     else:
-        print("Contato não encontrado!.")
+        print("Contato não encontrado!")
 
 def imprimir_contato(agenda):
     if len(agenda) == 0:
-        print("Agenda vazia.")
+        print("Agenda vazia")
     else:
         for nome in agenda:
             print("\nContato", nome)
             for tel in agenda[nome]:
-                print("--", tel)
+                print(tel)
 
 def main():
     agenda = {}
