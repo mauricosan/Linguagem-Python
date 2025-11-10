@@ -24,7 +24,12 @@ dic = {
 tradução = ""
 
 frase = input("Qual frase deseja traduzir para a língua dos piratas?: ")
+palavras = frase.split(" ")
+for palavra in palavras:
+    if palavra.lower() in dic:
+        tradução += dic[palavra.lower()] + " "
 
+print("Tradução para a língua dos piratas:", tradução)
 
 
 
