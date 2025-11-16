@@ -1,12 +1,8 @@
 
 from colorama import init, Fore, Style #Biblioteca de cores
 init(autoreset=True) #aqui ele reseta as cores a cada print automaticamente
-<<<<<<< HEAD
 from validate_docbr import CPF
 import requests #Biblioteca para fazer requisições HTTP
-
-=======
->>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
 
 def inicio_do_menu_(): #Função de inicio
     print(Fore.CYAN + Style.BRIGHT + "\n\t🏁 Bem-vindo(a) à Locadora — onde sua jornada começa!")
@@ -504,9 +500,6 @@ def inserindoRelatorio(Carros):
             arq.write("\n")
         arq.close()
         return True
-=======
->>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
-
 
 def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
     if "Telefone Fixo" not in dic_clientes[cpf]:
@@ -550,12 +543,11 @@ def excluir_cliente(cpf, dic_clientes):
 def main(): #onde tudo irá acontecer
     inicio = ""
 
-<<<<<<< HEAD
     agenda = {} # dicionário para armazenar os clientes
     Carros = {} # dicionário para armazenar os carros
-=======
+
     dicionario_clientes = {}
->>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
+
 
     while inicio != "n":
         inicio = inicio_do_menu_()
