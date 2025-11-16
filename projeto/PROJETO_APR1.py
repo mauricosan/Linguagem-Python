@@ -1,8 +1,12 @@
+
 from colorama import init, Fore, Style #Biblioteca de cores
 init(autoreset=True) #aqui ele reseta as cores a cada print automaticamente
+<<<<<<< HEAD
 from validate_docbr import CPF
 import requests #Biblioteca para fazer requisições HTTP
 
+=======
+>>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
 
 def inicio_do_menu_(): #Função de inicio
     print(Fore.CYAN + Style.BRIGHT + "\n\t🏁 Bem-vindo(a) à Locadora — onde sua jornada começa!")
@@ -51,10 +55,10 @@ def submenu_clientes():
     return exibir_submenu("SUBMENU DE CLIENTES", Fore.YELLOW, [
         "Adicionar Cliente",
         "Excluir Telefone",
-        "Buscar Cliente por CPF ou Nome",
+        "Buscar Cliente por CPF",
         "Atualizar Cadastro",
         "Excluir Cliente",
-        "Listar Clientes",
+        "Adicionar Telefone",
         "Voltar"
     ])
 
@@ -224,6 +228,7 @@ def adicionar_telefone(cpf, dic_clientes, tipo_telefone, telefone):
         return adicionar_telefone_celular(cpf, dic_clientes, telefone)
     else:
         return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone inválido."    
+<<<<<<< HEAD
 
 
 def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
@@ -499,12 +504,58 @@ def inserindoRelatorio(Carros):
             arq.write("\n")
         arq.close()
         return True
+=======
+>>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
 
-def main(): #onde tudo irá acontecer.
+
+def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
+    if "Telefone Fixo" not in dic_clientes[cpf]:
+        dic_clientes[cpf]["Telefone Fixo"] = []
+
+    
+    if telefone_fixo in dic_clientes[cpf]["Telefone Fixo"]:
+        return Style.BRIGHT + Fore.RED + "\tERRO! Número já adicionado."
+    else:
+        dic_clientes[cpf]["Telefone Fixo"].append(telefone_fixo)
+        return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
+    
+def adicionar_telefone_celular(cpf, dic_clientes, telefone_celular):
+    if "Telefone Celular" not in dic_clientes[cpf]:
+        dic_clientes[cpf]["Telefone Celular"] = []
+
+    
+    if telefone_celular in dic_clientes[cpf]["Telefone Celular"]:
+        return Style.BRIGHT + Fore.RED + "\tERRO! Número já adicionado."
+    else:
+        dic_clientes[cpf]["Telefone Celular"].append(telefone_celular)
+        return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
+    
+def atualizar_cadastro(cpf, dic_clientes, campo, novo_valor):
+    if cpf in dic_clientes:
+        if campo in dic_clientes[cpf]:
+            dic_clientes[cpf][campo] = novo_valor
+            return Style.BRIGHT + Fore.GREEN + "\tCadastro atualizado com sucesso!"
+        else:
+            return Style.BRIGHT + Fore.RED + "\tERRO! Campo inválido."
+    else:
+        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
+    
+def excluir_cliente(cpf, dic_clientes):
+    if cpf in dic_clientes:
+        del dic_clientes[cpf]
+        return Style.BRIGHT + Fore.GREEN + "\tCliente excluído com sucesso!"
+    else:
+        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
+    
+def main(): #onde tudo irá acontecer
     inicio = ""
 
+<<<<<<< HEAD
     agenda = {} # dicionário para armazenar os clientes
     Carros = {} # dicionário para armazenar os carros
+=======
+    dicionario_clientes = {}
+>>>>>>> fbd9486e4b967020aba0a02231b5529b42a06be6
 
     while inicio != "n":
         inicio = inicio_do_menu_()
