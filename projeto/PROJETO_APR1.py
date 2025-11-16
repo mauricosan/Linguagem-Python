@@ -224,7 +224,6 @@ def adicionar_telefone(cpf, dic_clientes, tipo_telefone, telefone):
         return adicionar_telefone_celular(cpf, dic_clientes, telefone)
     else:
         return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone inválido."    
-<<<<<<< HEAD
 
 
 def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
