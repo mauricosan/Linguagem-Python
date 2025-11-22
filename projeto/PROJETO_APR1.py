@@ -573,15 +573,46 @@ def carros_disponiveis(Carros, Agendamentos):
     if cont_Alugados == len(Carros):
         print(Style.BRIGHT + Fore.RED + "\tNenhum carro disponível para aluguel no momento.")
 
+def remover_aluguel(codigo_aluguel_remover, Agendamentos, Agendamentos_Desativados):
+    if codigo_aluguel_remover not in Agendamentos:
+        return Style.BRIGHT + Fore.RED + "\tCódigo de aluguel não encontrado."
+    else:
+        try:
+            print(Style.BRIGHT + Fore.YELLOW + f"\n\tInformações do aluguel com o código {codigo_aluguel_remover} a ser removido:")
+            for mostrar_Informacao in Agendamentos[codigo_aluguel_remover]:
+                print(Style.BRIGHT + Fore.WHITE + f"\t{mostrar_Informacao.capitalize()}: {Agendamentos[codigo_aluguel_remover][mostrar_Informacao]}")
+                
+            confirmar = input(Style.BRIGHT + Fore.WHITE + "\n\tO aluguel que está aparecendo, é esse mesmo a ser removido (s/n): ").lower()
+            while confirmar not in 'sn':
+                print(Style.BRIGHT + Fore.RED + "\n\tERRO! Digite apenas 's' ou 'n'.")
+                confirmar = input(Style.BRIGHT + Fore.WHITE + "\tO aluguel que está aparecendo, é esse mesmo a ser removido (s/n): ").lower()
+
+            if confirmar != 's':
+                return Style.BRIGHT + Fore.YELLOW + "\tRemoção de aluguel cancelada pelo usuário."
+            else:
+                Agendamentos_Desativados[codigo_aluguel_remover] = Agendamentos[codigo_aluguel_remover]
+                del Agendamentos[codigo_aluguel_remover]
+                return Style.BRIGHT + Fore.GREEN + "\tAluguel removido com sucesso!"
+        except ValueError:
+            return Style.BRIGHT + Fore.RED + "\tAlgo de errado aconteceu. Tente novamente."
+def buscar_aluguel_por_codigo(codigo_aluguel_buscar, Agendamentos):
+    if codigo_aluguel_buscar not in Agendamentos:
+        print(Style.BRIGHT + Fore.RED + "\tCódigo de aluguel não encontrado.")
+    else:
+        try:
+            print(Style.BRIGHT + Fore.YELLOW + f"\n\tInformações do aluguel com o código {codigo_aluguel_buscar}:")
+            for mostrar_Informacao in Agendamentos[codigo_aluguel_buscar]:
+                print(Style.BRIGHT + Fore.WHITE + f"\t{mostrar_Informacao.capitalize()}: {Agendamentos[codigo_aluguel_buscar][mostrar_Informacao]}")
+        except ValueError:
+            print(Style.BRIGHT + Fore.RED + "\tAlgo de errado aconteceu. Tente novamente.")
+
 def main(): #onde tudo irá acontecer
     inicio = ""
 
     dicionario_clientes = {} # dicionário para armazenar os clientes
     Carros = {} # dicionário para armazenar os carros
     Agendamentos = {} # dicionário para armazenar os agendamentos
-
-    
-
+    Agendamentos_Desativados = {} # dicionário para armazenar os agendamentos desativados
 
     while inicio != "n":
         inicio = inicio_do_menu_()
@@ -958,9 +989,12 @@ def main(): #onde tudo irá acontecer
                             else: 
                                 print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo cadastrado para ser aluguel.\n")
                         elif alugueis_submenu == 2:
-                            print()
+                            codigo_aluguel_remover = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o código do aluguel que deseja remover: ")
+                            mensagem_remover_aluguel = remover_aluguel(codigo_aluguel_remover, Agendamentos, Agendamentos_Desativados)
+                            print(mensagem_remover_aluguel)
                         elif alugueis_submenu == 3:
-                            print()
+                            codigo_aluguel_buscar = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o código do aluguel que deseja buscar: ")
+                            buscar_aluguel_por_codigo(codigo_aluguel_buscar, Agendamentos)
                         elif alugueis_submenu == 4:
                             print()
                         elif alugueis_submenu == 5:
