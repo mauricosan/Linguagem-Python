@@ -546,7 +546,33 @@ def validar_data_aluguel(data_inicio, data_fim, Agendamentos):
         return True
     except ValueError:
         return False
-    
+
+def verificar_aluguel(cpf, Agendamentos):
+    for aluguel in Agendamentos:
+        if Agendamentos[aluguel]['CPF Cliente'] == cpf:
+            return True
+    return False
+
+def carros_disponiveis(Carros, Agendamentos):
+    print(Style.BRIGHT + Fore.CYAN + "\n\tCarros disponíveis para aluguel:")
+    cont_Alugados = 0
+    for codigo in Carros:
+        alugado = False
+        for agendamentos in Agendamentos:
+            if Agendamentos[agendamentos]['Codigo Veículo'] == codigo:
+                alugado = True
+                break
+        if not alugado:
+            print(Style.BRIGHT + Fore.WHITE + f"\tCódigo: {codigo}")
+            print(Style.BRIGHT + Fore.GREEN + f"\t Status: Disponível para aluguel\n")
+        else:
+            cont_Alugados += 1
+            print(Style.BRIGHT + Fore.WHITE + f"\tCódigo: {codigo}")
+            print(Style.BRIGHT + Fore.RED + f"\t Status: Indisponível para aluguel\n")
+        
+    if cont_Alugados == len(Carros):
+        print(Style.BRIGHT + Fore.RED + "\tNenhum carro disponível para aluguel no momento.")
+
 def main(): #onde tudo irá acontecer
     inicio = ""
 
@@ -878,10 +904,8 @@ def main(): #onde tudo irá acontecer
                     while alugueis_submenu != 7:
                         alugueis_submenu = submenu_alugueis()
                         cont = 0
-                        contador = 0
                         if alugueis_submenu == 1:
-                            contador += 1
-                            codigo_aluguel = "aluguel-" + str(contador)
+                            codigo_aluguel = "aluguel-" + str(len(Agendamentos)+1)
                             if Carros != {}:
                                 if cont != len(Carros):
                                     testeCPF = False
@@ -889,87 +913,48 @@ def main(): #onde tudo irá acontecer
                                         cpf_cliente = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o CPF do cliente: ")
                                         if cpf_cliente in dicionario_clientes:
                                             if not verificar_cpf (cpf_cliente,dicionario_clientes):
-                                                imprimir_cliente_formatado(cpf_cliente, dicionario_clientes)
+                                                imprimir_cliente_formatado(cpf_cliente,  dicionario_clientes)
                                                 testeCPF = True
                                             else:
                                                 print(Style.BRIGHT + Fore.RED + "\n\tCPF inválido ou não cadastrado. Tente novamente.\n")
-                    
+                                            
+                                            cpf_alugado = verificar_aluguel(cpf_cliente, Agendamentos)
+                                            if cpf_alugado:
+                                                print(Style.BRIGHT + Fore.RED + "\n\tCliente já possui um aluguel ativo. Não é possível realizar um novo aluguel.\n")
+                                            else:
+                                                carros_disponiveis(Carros, Agendamentos)
+                                                testeVeiculo = False
+                                                while not testeVeiculo:
+                                                    if len(Carros) != len(Agendamentos):
+                                                        codigo_veiculo = input(Style.BRIGHT + Fore.WHITE + "\tDigite o código do veículo: ")
+                                                        if validar_codigo(codigo_veiculo):
+                                                            if codigo_veiculo not in Agendamentos:
+                                                                testeVeiculo = True
+                                                            else:
+                                                                print(Style.BRIGHT + Fore.RED + "\n\tVeículo já está alugado. Tente novamente.\n")
+                                                        else:
+                                                            print(Style.BRIGHT + Fore.RED + "\n\tCódigo inválido. Tente novamente.\n")
+                                                        calendario()
+                                                        verificar_datas = False
+                                                        while not verificar_datas:
+                                                            data_inicio = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de início do aluguel (DD/MM/AAAA): ")
+                                                            data_fim = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de fim do aluguel (DD/MM/AAAA): ")
+                                                            if validar_data_aluguel(data_inicio, data_fim, Agendamentos):
+                                                                verificar_datas = True
+                                                            else:
+                                                                print(Style.BRIGHT + Fore.RED + "\n\tDatas inválidas ou periodo já alugado. Tente novamente.\n")
+                                                    
+                                                        Agendamentos[codigo_aluguel] = {
+                                                        "CPF Cliente": cpf_cliente,
+                                                        "Codigo Veículo": codigo_veiculo,
+                                                        "Data Início": data_inicio,
+                                                        "Data Fim": data_fim
+                                                        }
+                                                        print(Style.BRIGHT + Fore.GREEN + "\tAluguel registrado com sucesso!")
+                                                    else:
+                                                        testeVeiculo = True
                                         else:
                                             print(Style.BRIGHT + Fore.RED + "\n\tCPF não cadastrado. Volte para o inicio e faça o seu cadastro.\n")
-                                            submenu_alugueis()
-                                    
-                                    # Verificando se o cpf do cliente já está vinculado a um aluguel
-                                    cpf_alugado = False
-                                    for cpf_aluguel in Agendamentos:
-                                        for itens in Agendamentos[cpf_aluguel]:
-                                            aluguel = Agendamentos[cpf_aluguel]
-                                            if aluguel["CPF Cliente"] == cpf_cliente:
-                                                cpf_alugado = True
-                                                break
-                                        
-                                    if cpf_alugado:
-                                        print(Style.BRIGHT + Fore.RED + "\n\tCliente já possui um aluguel ativo. Não é possível realizar um novo aluguel.\n")
-                                        submenu_alugueis()
-                                    # Mostrando os carros disponíveis para aluguel
-                                    
-                                    print(Style.BRIGHT + Fore.CYAN + "\n\tCarros disponíveis para aluguel:")
-                                    
-                                    for codigo, detalhes in Carros.items():
-                                        
-                                        print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo: {codigo}")
-                                        
-                                        #verificando se o veículo está alugado
-                                        contAlugueis = 0
-                                        alugado = False
-                                        for aluguel in Agendamentos.values():
-                                            if aluguel["Código Veículo"] == codigo:
-                                                alugado = True
-                                                break
-                                        
-                                        #se tiver alugado
-                                        todosVeiculosAlugados = True
-                                        if alugado:
-                                            print(Style.BRIGHT + Fore.RED + "\tStatus: Alugado")
-                                            contAlugueis = contAlugueis + 1
-                                        else:
-                                            print(Style.BRIGHT + Fore.GREEN + "\tStatus: Disponível")
-                                            todosVeiculosAlugados = False
-                                        
-                                        if todosVeiculosAlugados and contAlugueis == len(Carros):
-                                            print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo disponível para aluguel no momento.\n")
-                                            submenu_alugueis()
-                                                
-                                    testeVeiculo = False
-                                    while not testeVeiculo:
-                                        codigo_veiculo = input(Style.BRIGHT + Fore.WHITE + "\tDigite o código do veículo: ")
-                                        if validar_codigo(codigo_veiculo):
-                                            if codigo_veiculo not in Agendamentos:
-                                                testeVeiculo = True
-                                            else:
-                                                print(Style.BRIGHT + Fore.RED + "\n\tVeículo já está alugado. Tente novamente.\n")
-                                        else:
-                                                print(Style.BRIGHT + Fore.RED + "\n\tCódigo inválido. Tente novamente.\n")
-                                else:
-                                    print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo disponível para aluguel no momento.\n")
-                                    submenu_alugueis()
-                                
-                                calendario()
-                                verificar_datas = False
-                                while not verificar_datas:
-                                    data_inicio = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de início do aluguel (DD/MM/AAAA): ")
-                                    data_fim = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de fim do aluguel (DD/MM/AAAA): ")
-                                    if validar_data_aluguel(data_inicio, data_fim, Agendamentos):
-                                        verificar_datas = True
-                                    else:
-                                        print(Style.BRIGHT + Fore.RED + "\n\tDatas inválidas ou periodo já alugado. Tente novamente.\n")
-                                
-                                Agendamentos[codigo_aluguel] = {
-                                    "CPF Cliente": cpf_cliente,
-                                    "Código Veículo": codigo_veiculo,
-                                    "Data Início": data_inicio,
-                                    "Data Fim": data_fim
-                                }
-                                print(Style.BRIGHT + Fore.GREEN + "\tAluguel registrado com sucesso!")
                             else: 
                                 print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo cadastrado para ser aluguel.\n")
                         elif alugueis_submenu == 2:

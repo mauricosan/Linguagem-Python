@@ -6,3 +6,11 @@ Combustivel: Gasolina;
 Ano: 2024;
 Modelo: BMW X1;
 
+Código: 1001;
+Descricao: Carro de Luxo;
+Categoria: B;
+Capacidade: 5;
+Combustivel: Gasolina;
+Ano: 2025;
+Modelo: Bmw x4;
+
