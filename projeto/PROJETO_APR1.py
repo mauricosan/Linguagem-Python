@@ -917,9 +917,34 @@ def main(): #onde tudo irá acontecer
                             mensagem_atualizar = atualizar_veiculos(codigo_atualizar, Carros)
                             print(mensagem_atualizar)
                         elif veiculos_submenu == 5:
-                            print()
+                            # Os veiculos que estão disponiveis
+                            print(Style.BRIGHT + Fore.CYAN + "\n\tCarros disponíveis para aluguel:")
+                            if len(Agendamentos) != 0:
+                                for codigo in Carros:
+                                    for aluguel in Agendamentos:
+                                        if Agendamentos[aluguel]['Codigo Veículo'] != codigo or len(Agendamentos) == 0:
+                                            print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo: {codigo}")
+                                            for conteudo in Carros[codigo]:
+                                                print(Style.BRIGHT + Fore.WHITE + f"\t{conteudo.capitalize()}: {Carros[codigo][conteudo]}")
+                                            print(Style.BRIGHT + Fore.GREEN + f"\t Status: Disponível para aluguel")
+                            else:
+                                for codigo in Carros:
+                                    print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo: {codigo}")
+                                    for conteudo in Carros[codigo]:
+                                        print(Style.BRIGHT + Fore.WHITE + f"\t{conteudo.capitalize()}: {Carros[codigo][conteudo]}")
+                                    print(Style.BRIGHT + Fore.GREEN + f"\t Status: Disponível para aluguel")
                         elif veiculos_submenu == 6:
-                            print()
+                            # Os veiculos que estão alugados
+                            if len(Agendamentos) != 0 or len(Carros) != len(Agendamentos):
+                                for codigo in Carros:
+                                    for aluguel in Agendamentos:
+                                        if Agendamentos[aluguel]['Codigo Veículo'] == codigo:
+                                            print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo: {codigo}")
+                                            for conteudo in Carros[codigo]:
+                                                print(Style.BRIGHT + Fore.WHITE + f"\t{conteudo.capitalize()}: {Carros[codigo][conteudo]}")
+                                            print(Style.BRIGHT + Fore.RED + f"\t Status: Indisponível para aluguel")
+                            else:
+                                print(Style.BRIGHT + Fore.RED + "\n\tNenhum carro está alugado no momento.")
                         elif veiculos_submenu == 7:
                             print(Fore.YELLOW + "\tInserindo os Dados no Relatorio.....")
                             if inserindoRelatorio(Carros):
@@ -948,6 +973,7 @@ def main(): #onde tudo irá acontecer
                                                 testeCPF = True
                                             else:
                                                 print(Style.BRIGHT + Fore.RED + "\n\tCPF inválido ou não cadastrado. Tente novamente.\n")
+                                                break
                                             
                                             cpf_alugado = verificar_aluguel(cpf_cliente, Agendamentos)
                                             if cpf_alugado:
@@ -986,6 +1012,7 @@ def main(): #onde tudo irá acontecer
                                                         testeVeiculo = True
                                         else:
                                             print(Style.BRIGHT + Fore.RED + "\n\tCPF não cadastrado. Volte para o inicio e faça o seu cadastro.\n")
+                                            testeCPF = True
                             else: 
                                 print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo cadastrado para ser aluguel.\n")
                         elif alugueis_submenu == 2:
