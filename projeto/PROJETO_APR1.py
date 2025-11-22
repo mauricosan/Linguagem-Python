@@ -278,13 +278,15 @@ def validar_codigo(codigo):
         return False
 
 # Validando a descrição do veículo
-def validar_descrisao(descrisao):
-    for char in descrisao:
+def validar_descricao(descricao):
+
+    for char in descricao:
         if char in "!@#$%¨&*()_?/´`^~:;}{[]<>+=-|\\'\"0123456789":
             return False
         
-        if len(descrisao) == 0 or descrisao.isspace():
-            return False
+    if len(descricao) == 0 or descricao.isspace():
+        return False
+    
     return True
 
 def validar_categoria(categoria):
@@ -404,78 +406,47 @@ def atualizar_veiculos(codigo_atualizar, Carros):
             for mostrar_Informacao in Carros[codigo_atualizar]:
                 print(Style.BRIGHT + Fore.WHITE + f"\t{mostrar_Informacao.capitalize()}: {Carros[codigo_atualizar][mostrar_Informacao]}")
             print(Style.BRIGHT + Fore.CYAN + "\n\tDigite os novos dados do veículo (deixe em branco para manter o valor atual):")
-            validar = True
-            while validar:
-                codigo = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o código do veículo (1000 ate 100000): ")
-                if validar_codigo(codigo):
-                    if codigo in Carros:
-                        print(Style.BRIGHT + Fore.RED + "\n\tCódigo já cadastrado. Tente novamente.")
-                    else:
-                        validar = False
-                else:
-                    print(Style.BRIGHT + Fore.RED + "\n\tCódigo inválido. Tente novamente.\n")
                             
-                #Validando a descrisão do veículo para inserir novamente
-                validar = True
-                while validar:
-                    descrisao = input(Style.BRIGHT + Fore.WHITE + "\tDigite a descrição do veículo: ")
-                    if validar_descrisao(descrisao):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tDescrição inválida. Tente novamente.\n")
+            #Validando a descrisão do veículo para inserir novamente
+            descricao = input(Style.BRIGHT + Fore.WHITE + "\tDigite a descrição do veículo: ")
                             
-                #Validando a categoria do veículo para inserir novamente
-                validar = True
-                while validar:
-                    categoria = input(Style.BRIGHT + Fore.WHITE + "\tDigite a categoria do veículo: ").upper()
-                    if validar_categoria(categoria):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tCategoria inválida. Tente novamente.\n")
+            #Validando a categoria do veículo para inserir novamente
+            categoria = input(Style.BRIGHT + Fore.WHITE + "\tDigite a categoria do veículo: ").upper()
+                    
                             
-                #Validando a capacidade do veículo colocado pelo usuário
-                validar = True
-                while validar:
-                    capacidade = input(Style.BRIGHT + Fore.WHITE + "\tDigite a capacidade do veículo: ")
-                    if validar_capacidade(capacidade):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tCapacidade inválida. Tente novamente.\n")
+            #Validando a capacidade do veículo colocado pelo usuário
+            capacidade = input(Style.BRIGHT + Fore.WHITE + "\tDigite a capacidade do veículo: ")
                             
-                #Validando o combustivel do veículo para inserir novamente
-                validar = True
-                while validar:
-                    combustivel = input(Style.BRIGHT + Fore.WHITE + "\tDigite o tipo de combustível do veículo (Gasolina, Álcool, Flex, Elétrico): ").capitalize()
-                    if validar_combustivel(combustivel):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tCombustível inválido. Tente novamente.\n")
-                            
-                #Validando o ano do veiculo para inserir novamente
-                validar = True
-                while validar:
-                    ano = input(Style.BRIGHT + Fore.WHITE + "\tDigite o ano do veículo: ")
-                    if validar_ano(ano):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tAno inválido. Tente novamente.\n")
-                            
-                #Validando o modelo e nome do carro para inserir novamente
-                validar = True
-                while validar:
-                    modelo = input(Style.BRIGHT + Fore.WHITE + "\tDigite o modelo do veículo: ")
-                    nomeCarro = input(Style.BRIGHT + Fore.WHITE + "\tDigite o nome do carro: ")
-                    if validar_modelo(modelo,nomeCarro):
-                        validar = False
-                    else:
-                        print(Style.BRIGHT + Fore.RED + "\n\tModelo ou nome do carro inválido. Tente novamente.\n")
-                        
-                Carros[codigo_atualizar]["descrisao"] = descrisao
-                Carros[codigo_atualizar]["categoria"] = categoria
-                Carros[codigo_atualizar]["capacidade"] = capacidade
-                Carros[codigo_atualizar]["combustivel"] = combustivel
-                Carros[codigo_atualizar]["ano"] = ano
-                Carros[codigo_atualizar]["modelo"] = modelo + " " + nomeCarro
+            #Validando o combustivel do veículo para inserir novamente
+            combustivel = input(Style.BRIGHT + Fore.WHITE + "\tDigite o tipo de combustível do veículo (Gasolina, Álcool, Flex, Elétrico): ").capitalize()
+
+            #Validando o ano do veiculo para inserir novamente
+            ano = input(Style.BRIGHT + Fore.WHITE + "\tDigite o ano do veículo: ")
+                    
+            #Validando o modelo e nome do carro para inserir novamente
+            modelo = input(Style.BRIGHT + Fore.WHITE + "\tDigite o modelo do veículo: ")
+            nomeCarro = input(Style.BRIGHT + Fore.WHITE + "\tDigite o nome do carro: ")
+            if descricao == "" or descricao.isspace():
+                descricao = Carros[codigo_atualizar]["descricao"]
+            if categoria == "" or categoria.isspace():
+                categoria = Carros[codigo_atualizar]["categoria"]
+            if capacidade == "" or capacidade.isspace():
+                capacidade = Carros[codigo_atualizar]["capacidade"]
+            if combustivel == "" or combustivel.isspace():
+                combustivel = Carros[codigo_atualizar]["combustivel"]
+            if ano == "" or ano.isspace():
+                ano = Carros[codigo_atualizar]["ano"]
+            if modelo == "" or modelo.isspace() or nomeCarro == "" or nomeCarro.isspace():
+                modelo_nome_atual = Carros[codigo_atualizar]["modelo"].split(" ", 1)
+                modelo = modelo_nome_atual[0]
+                nomeCarro = modelo_nome_atual[1]
+            
+            Carros[codigo_atualizar]["descricao"] = descricao
+            Carros[codigo_atualizar]["categoria"] = categoria
+            Carros[codigo_atualizar]["capacidade"] = capacidade
+            Carros[codigo_atualizar]["combustivel"] = combustivel
+            Carros[codigo_atualizar]["ano"] = ano
+            Carros[codigo_atualizar]["modelo"] = modelo + " " + nomeCarro
             return Style.BRIGHT + Fore.GREEN + "\tVeículo atualizado com sucesso!"
         except ValueError:
             return Style.BRIGHT + Fore.RED + "\tCódigo inválido."
@@ -538,14 +509,52 @@ def excluir_cliente(cpf, dic_clientes):
         return Style.BRIGHT + Fore.GREEN + "\tCliente excluído com sucesso!"
     else:
         return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
+
+############################## Parte do Aluguel de carros ##############################
+
+def calendario():
+    import calendar
+    from datetime import datetime
+    
+    dia = datetime.now().day
+    mes = datetime.now().month
+    ano = datetime.now().year
+    
+    print(Style.BRIGHT + Fore.CYAN + "\nCalendário do mês atual:")
+    print(Style.BRIGHT + Fore.WHITE + calendar.month(ano, mes))
+
+def validar_data_aluguel(data_inicio, data_fim, Agendamentos):
+    from datetime import datetime, timedelta # Importando timedelta para manipular datas
+    try:
+        inicio = datetime.strptime(data_inicio, "%d/%m/%Y") # Convertendo a string para objeto datetime
+        fim = datetime.strptime(data_fim, "%d/%m/%Y") # Convertendo a string para objeto datetime
+        
+        if inicio >= fim: # Verificando se a data de início é antes da data de fim
+            return False
+        
+        hoje = datetime.now() # Obtendo a data atual
+        if inicio <= hoje or fim <= hoje: # Verificando se as datas são no passado ou no dia atual
+            return False
+        
+        # Verificando se o período de aluguel não excede 30 dias
+        if (fim - inicio).days > 30:
+            return False
+        
+        # if (inicio - hoje).days < 1: # Verificando se a data de início é pelo menos 1 dia após a data atual
+        #     return False
+        
+        return True
+    except ValueError:
+        return False
     
 def main(): #onde tudo irá acontecer
     inicio = ""
 
-    agenda = {} # dicionário para armazenar os clientes
+    dicionario_clientes = {} # dicionário para armazenar os clientes
     Carros = {} # dicionário para armazenar os carros
+    Agendamentos = {} # dicionário para armazenar os agendamentos
 
-    dicionario_clientes = {}
+    
 
 
     while inicio != "n":
@@ -763,8 +772,8 @@ def main(): #onde tudo irá acontecer
                             #Validando a descrisão do veículo colocado pele usuário
                             validar = True
                             while validar:
-                                descrisao = input(Style.BRIGHT + Fore.WHITE + "\tDigite a descrição do veículo: ")
-                                if validar_descrisao(descrisao):
+                                descricao = input(Style.BRIGHT + Fore.WHITE + "\tDigite a descrição do veículo: ")
+                                if validar_descricao(descricao):
                                     validar = False
                                 else:
                                     print(Style.BRIGHT + Fore.RED + "\n\tDescrição inválida. Tente novamente.\n")
@@ -772,7 +781,8 @@ def main(): #onde tudo irá acontecer
                             #Validando a categoria do veículo colocado pelo usuário
                             validar = True
                             while validar:
-                                categoria = input(Style.BRIGHT + Fore.WHITE + "\tDigite a categoria do veículo: ")
+                                cat = input(Style.BRIGHT + Fore.WHITE + "\tDigite a categoria do veículo: ")
+                                categoria = cat.upper()
                                 if validar_categoria(categoria):
                                     validar = False
                                 else:
@@ -827,7 +837,7 @@ def main(): #onde tudo irá acontecer
                                 print(Fore.RED + Style.BRIGHT + "\n\tERRO! O código não pode estar em branco.")
                             else:
                                 Carros[codigo] = {
-                                    "descrisao": descrisao,
+                                    "descricao": descricao,
                                     "categoria": categoria,
                                     "capacidade": capacidade,
                                     "combustivel": combustivel,
@@ -867,9 +877,101 @@ def main(): #onde tudo irá acontecer
                     alugueis_submenu = 1
                     while alugueis_submenu != 7:
                         alugueis_submenu = submenu_alugueis()
-
+                        cont = 0
+                        contador = 0
                         if alugueis_submenu == 1:
-                            print()
+                            contador += 1
+                            codigo_aluguel = "aluguel-" + str(contador)
+                            if Carros != {}:
+                                if cont != len(Carros):
+                                    testeCPF = False
+                                    while not testeCPF:
+                                        cpf_cliente = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o CPF do cliente: ")
+                                        if cpf_cliente in dicionario_clientes:
+                                            if not verificar_cpf (cpf_cliente,dicionario_clientes):
+                                                imprimir_cliente_formatado(cpf_cliente, dicionario_clientes)
+                                                testeCPF = True
+                                            else:
+                                                print(Style.BRIGHT + Fore.RED + "\n\tCPF inválido ou não cadastrado. Tente novamente.\n")
+                    
+                                        else:
+                                            print(Style.BRIGHT + Fore.RED + "\n\tCPF não cadastrado. Volte para o inicio e faça o seu cadastro.\n")
+                                            submenu_alugueis()
+                                    
+                                    # Verificando se o cpf do cliente já está vinculado a um aluguel
+                                    cpf_alugado = False
+                                    for cpf_aluguel in Agendamentos:
+                                        for itens in Agendamentos[cpf_aluguel]:
+                                            aluguel = Agendamentos[cpf_aluguel]
+                                            if aluguel["CPF Cliente"] == cpf_cliente:
+                                                cpf_alugado = True
+                                                break
+                                        
+                                    if cpf_alugado:
+                                        print(Style.BRIGHT + Fore.RED + "\n\tCliente já possui um aluguel ativo. Não é possível realizar um novo aluguel.\n")
+                                        submenu_alugueis()
+                                    # Mostrando os carros disponíveis para aluguel
+                                    
+                                    print(Style.BRIGHT + Fore.CYAN + "\n\tCarros disponíveis para aluguel:")
+                                    
+                                    for codigo, detalhes in Carros.items():
+                                        
+                                        print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo: {codigo}")
+                                        
+                                        #verificando se o veículo está alugado
+                                        contAlugueis = 0
+                                        alugado = False
+                                        for aluguel in Agendamentos.values():
+                                            if aluguel["Código Veículo"] == codigo:
+                                                alugado = True
+                                                break
+                                        
+                                        #se tiver alugado
+                                        todosVeiculosAlugados = True
+                                        if alugado:
+                                            print(Style.BRIGHT + Fore.RED + "\tStatus: Alugado")
+                                            contAlugueis = contAlugueis + 1
+                                        else:
+                                            print(Style.BRIGHT + Fore.GREEN + "\tStatus: Disponível")
+                                            todosVeiculosAlugados = False
+                                        
+                                        if todosVeiculosAlugados and contAlugueis == len(Carros):
+                                            print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo disponível para aluguel no momento.\n")
+                                            submenu_alugueis()
+                                                
+                                    testeVeiculo = False
+                                    while not testeVeiculo:
+                                        codigo_veiculo = input(Style.BRIGHT + Fore.WHITE + "\tDigite o código do veículo: ")
+                                        if validar_codigo(codigo_veiculo):
+                                            if codigo_veiculo not in Agendamentos:
+                                                testeVeiculo = True
+                                            else:
+                                                print(Style.BRIGHT + Fore.RED + "\n\tVeículo já está alugado. Tente novamente.\n")
+                                        else:
+                                                print(Style.BRIGHT + Fore.RED + "\n\tCódigo inválido. Tente novamente.\n")
+                                else:
+                                    print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo disponível para aluguel no momento.\n")
+                                    submenu_alugueis()
+                                
+                                calendario()
+                                verificar_datas = False
+                                while not verificar_datas:
+                                    data_inicio = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de início do aluguel (DD/MM/AAAA): ")
+                                    data_fim = input(Style.BRIGHT + Fore.WHITE + "\tDigite a data de fim do aluguel (DD/MM/AAAA): ")
+                                    if validar_data_aluguel(data_inicio, data_fim, Agendamentos):
+                                        verificar_datas = True
+                                    else:
+                                        print(Style.BRIGHT + Fore.RED + "\n\tDatas inválidas ou periodo já alugado. Tente novamente.\n")
+                                
+                                Agendamentos[codigo_aluguel] = {
+                                    "CPF Cliente": cpf_cliente,
+                                    "Código Veículo": codigo_veiculo,
+                                    "Data Início": data_inicio,
+                                    "Data Fim": data_fim
+                                }
+                                print(Style.BRIGHT + Fore.GREEN + "\tAluguel registrado com sucesso!")
+                            else: 
+                                print(Style.BRIGHT + Fore.RED + "\n\tNenhum veículo cadastrado para ser aluguel.\n")
                         elif alugueis_submenu == 2:
                             print()
                         elif alugueis_submenu == 3:
@@ -911,5 +1013,5 @@ def main(): #onde tudo irá acontecer
             print(Style.BRIGHT + Fore.YELLOW + "\n\tEncerrando Programa...")
             print(Fore.BLACK + Style.BRIGHT + "\tPrograma Encerrado.")
 
-
-main()
+if __name__ == "__main__":
+    main()

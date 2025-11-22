@@ -1,16 +1,8 @@
-Código: 1000
-Descrisao: Bem conservado e cuidado.
-Categoria: B
-Capacidade: 5
-Combustivel: Flex
-Ano: 2020
-Modelo: Fiat Argo
-
-Código: 1001
-Descrisao: Bem conservado e cuidado.
-Categoria: B
-Capacidade: 5
-Combustivel: Gasolina
-Ano: 2020
-Modelo: BMW X1
+Código: 1000;
+Descricao: Carro de Luxo;
+Categoria: B;
+Capacidade: 5;
+Combustivel: Gasolina;
+Ano: 2024;
+Modelo: BMW X1;
 
