@@ -1,8 +1,0 @@
-Código: 10000;
-Descricao: Muito bom;
-Categoria: A;
-Capacidade: 5;
-Combustivel: Gasolina;
-Ano: 2020;
-Modelo: fiat palio;
-

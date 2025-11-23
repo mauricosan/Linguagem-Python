@@ -4,6 +4,10 @@ init(autoreset=True) #aqui ele reseta as cores a cada print automaticamente
 from validate_docbr import CPF
 import requests #Biblioteca para fazer requisições HTTP
 
+CAMINHO_PASTA = "arquivos_txt/"
+
+# ---------FUNÇÕES DE MENU---------
+
 def inicio_do_menu_(): #Função de inicio
     print(Fore.CYAN + Style.BRIGHT + "\n\t🏁 Bem-vindo(a) à Locadora — onde sua jornada começa!")
     
@@ -302,52 +306,72 @@ def excluir_cliente(cpf, dic_clientes): #função que excluir  o cadastro do cli
 def inicializar_arquivo_clientes():
     try:
         # cria o arquivo se ele não existir
-        open("clientes.txt", "x").close()
+       open(CAMINHO_PASTA + "clientes.txt", "x").close()
     except FileExistsError:
         pass  # se já existir, não faz nada
 
 def carregar_clientes():
     clientes = {}
+    
     try:
-        with open("clientes.txt", "r", encoding="utf-8") as arquivo:
-            for linha in arquivo:
-                linha = linha.strip()
-                if linha == "":
-                    continue  # ignora linhas vazias
+        with open(CAMINHO_PASTA + "clientes.txt", "r", encoding="utf-8") as arq:
+            linhas = arq.readlines()
 
-                # separa os campos do cliente
-                campos = linha.split(";")
-                cpf = campos[0]
+        i = 0
+        while i < len(linhas):
+            if linhas[i].startswith("CPF:"):
+                cpf = linhas[i].split(":", 1)[1].strip()
+                nome = linhas[i+1].split(":", 1)[1].strip()
+                nascimento = linhas[i+2].split(":", 1)[1].strip()
+                endereco = linhas[i+3].split(":", 1)[1].strip()
+                tel_fixo = linhas[i+4].split(":", 1)[1].strip()
+                tel_cel = linhas[i+5].split(":", 1)[1].strip()
 
                 clientes[cpf] = {
-                    "Nome": campos[1],
-                    "Data de Nascimento": campos[2],
-                    "Endereco": campos[3],
-                    "Telefone Fixo": [campos[4]],
-                    "Telefone Celular": [campos[5]]
+                    "Nome": nome,
+                    "Data de Nascimento": nascimento,
+                    "Endereco": endereco,
+                    "Telefone Fixo": [tel_fixo] if tel_fixo != "(nenhum)" else [],
+                    "Telefone Celular": [tel_cel] if tel_cel != "(nenhum)" else []
                 }
+
+                i += 7
+            else:
+                i += 1
+                
     except FileNotFoundError:
         pass
 
     return clientes
 
+
 def salvar_cliente_arquivo(cpf, cliente_dict):
-    with open("clientes.txt", "a", encoding="utf-8") as arquivo:
-        linha = (
-            f"{cpf};"
-            f"{cliente_dict['Nome']};"
-            f"{cliente_dict['Data de Nascimento']};"
-            f"{cliente_dict['Endereco']};"
-            f"{cliente_dict['Telefone Fixo'][0]};"
-            f"{cliente_dict['Telefone Celular'][0]}\n"
-        )
-        arquivo.write(linha)
+    with open(CAMINHO_PASTA + "clientes.txt", "a", encoding="utf-8") as arquivo:
+        arquivo.write(f"CPF: {cpf}\n")
+        arquivo.write(f"Nome: {cliente_dict['Nome']}\n")
+        arquivo.write(f"Nascimento: {cliente_dict['Data de Nascimento']}\n")
+        arquivo.write(f"Endereço: {cliente_dict['Endereco']}\n")
+        
+        # Telefone Fixo
+        if cliente_dict['Telefone Fixo']:
+            arquivo.write(f"Telefone Fixo: {cliente_dict['Telefone Fixo'][0]}\n")
+        else:
+            arquivo.write("Telefone Fixo: (nenhum)\n")
+        
+        # Telefone Celular
+        if cliente_dict['Telefone Celular']:
+            arquivo.write(f"Telefone Celular: {cliente_dict['Telefone Celular'][0]}\n")
+        else:
+            arquivo.write("Telefone Celular: (nenhum)\n")
+
+        arquivo.write("-" * 40 + "\n\n")  # separador
+
 
 def remover_cliente_arquivo(cpf_remover):
-    with open("clientes.txt", "r", encoding="utf-8") as arquivo:
+    with open(CAMINHO_PASTA + "clientes.txt", "r", encoding="utf-8") as arquivo:
         linhas = arquivo.readlines()
 
-    with open("clientes.txt", "w", encoding="utf-8") as arquivo:
+    with open(CAMINHO_PASTA + "clientes.txt", "w", encoding="utf-8") as arquivo:
         for linha in linhas:
             if not linha.startswith(cpf_remover + ";"):
                 arquivo.write(linha)
@@ -548,7 +572,7 @@ def exiteArquivo(caminho):
     return False
 
 def inserindoRelatorio(Carros):
-    caminho = "Carros_Registrados.txt"
+    caminho = CAMINHO_PASTA + "Carros_Registrados.txt"
     arq = open(caminho,"w",encoding="utf-8")
     if exiteArquivo(caminho):
         for chave in Carros:
@@ -778,7 +802,7 @@ def relatorio_reservas_por_cpf(Agendamentos, cpf):
         print(Fore.RED + "\tNenhuma reserva encontrada para este CPF.")
 
 def relatorio_alugueis(Agendamentos):
-    caminho = "Relatorio_Alugueis.txt"
+    caminho = CAMINHO_PASTA + "Relatorio_Alugueis.txt"
     arq = open(caminho,"w",encoding="utf-8")
     if exiteArquivo(caminho):
         for chave in Agendamentos:
@@ -790,7 +814,7 @@ def relatorio_alugueis(Agendamentos):
         return True
     
 def relatorio_veeiculos(Carros):
-    caminho = "Relatorio_Veiculos.txt"
+    caminho = CAMINHO_PASTA + "Relatorio_Veiculos.txt"
     arq = open(caminho,"w",encoding="utf-8")
     if exiteArquivo(caminho):
         for chave in Carros:
@@ -802,7 +826,7 @@ def relatorio_veeiculos(Carros):
         return True
     
 def relatorio_clientes(dicionario_clientes):
-    caminho = "Relatorio_Clientes.txt"
+    caminho = CAMINHO_PASTA + "Relatorio_Clientes.txt"
     arq = open(caminho,"w",encoding="utf-8")
     if exiteArquivo(caminho):
         for chave in dicionario_clientes:
@@ -815,12 +839,12 @@ def relatorio_clientes(dicionario_clientes):
     
 def inicializar_arquivo_alugueis():
     try:
-        open("alugueis.txt", "x").close()  # cria se não existir
+        open(CAMINHO_PASTA + "alugueis.txt", "x").close() # cria se não existir
     except FileExistsError:
         pass
 
 def salvar_aluguel_arquivo(codigo, aluguel_dict):
-    with open("alugueis.txt", "a", encoding="utf-8") as arq:
+    with open(CAMINHO_PASTA + "alugueis.txt", "a", encoding="utf-8") as arq:
         linha = (
             f"{codigo};"
             f"{aluguel_dict['CPF Cliente']};"
@@ -833,7 +857,7 @@ def salvar_aluguel_arquivo(codigo, aluguel_dict):
 def carregar_alugueis():
     alugueis = {}
     try:
-        with open("alugueis.txt", "r", encoding="utf-8") as arquivo:
+        with open(CAMINHO_PASTA + "alugueis.txt", "r", encoding="utf-8") as arquivo:
             for linha in arquivo:
                 linha = linha.strip()
                 if linha == "":
