@@ -15,7 +15,7 @@ def inicio_do_menu_(): #Função de inicio
             print(Style.BRIGHT + Fore.RED + "\n\tERRO! Digite apenas 's' ou 'n'.")
 
 
-def exibir_submenu(titulo, cor, opcoes): #função genérica para os submenus, contendo as linhas envolta do título, cor e o titulo, ele também vai enquadrar o titulo no meio do retângulo.
+def exibir_submenu(titulo, cor, opcoes): #função genérica para os submenus, contendo as linhas em volta do título, cor e o titulo, ele também vai enquadrar o titulo no meio do retângulo.
     largura = len(titulo) + 12
     print(Style.BRIGHT + cor + "\n" + "\t" + "╔" + "═" * largura + "╗")
     print(Style.BRIGHT + cor + "\t║" + f"{titulo:^{largura}}" + "║")
@@ -38,7 +38,7 @@ def exibir_submenu(titulo, cor, opcoes): #função genérica para os submenus, c
 
 #---------FUNÇÕES DOS SUBMENUS---------
 
-def submenu_principal():
+def submenu_principal(): 
     return exibir_submenu("MENU DE OPÇÕES", Fore.GREEN, [
         "Submenu de Clientes",
         "Submenu de Veículos",
@@ -80,66 +80,70 @@ def submenu_alugueis():
         "Voltar"
     ])
 
-def submenu_relatorio ():
+def submenu_relatorio():
     return exibir_submenu("SUBMENU DE RELATÓRIOS", Fore.BLUE, [
-        "Relatório de Clientes",
-        "Relatório de Veículos",
-        "Relatório de Aluguéis",
+        "Relatório: Reservas por CPF",
+        "Relatório: Reservas por Código do Veículo",
+        "Relatório: Reservas por Período",
         "Voltar"
-    ]) 
+    ])
+
+
 
 # ---------FUNÇÕES DAS OPÇÕES DO SUBMENU CLIENTES---------
 
-def verificar_cpf (cpf,dic_clientes): 
+def verificar_cpf (cpf,dic_clientes): #verificação do cpf para ver se não está vazio ou se não tem letras no lugar de números
     vazio = True
     i = 0 
-    while i <len(cpf):
-        if cpf[i] != " ":
+    while i <len(cpf): 
+        if cpf[i] != " ": #se o cpf na posição i for diferente que espaço, ele vai transformar o vazio em falso e se o vazio for verdadeiro, retorna falso.
             vazio = False
         i += 1
-    if vazio:
+    if vazio: #se estiver vazio, vai retornar falso
         return False
     
     i = 0
-    while i<10:
+    while i<10: #verificando se tem somente números nos 10 primeiros caracteres
         if cpf[i] < "0" or cpf[i] > "9":
             return False
         i += 1
 
-    if cpf in dic_clientes:
+    if cpf in dic_clientes: #se o cpf já estiver adicionado no dicioário ele vai retornar falso
         return False
     else:
         return True
 
-def verificar_nome(nome):
+def verificar_nome(nome): #verificação do nome
     vazio = True
     i = 0
-    while i < len(nome):
+
+    while i < len(nome): #verificando se o nome não teem só espaço ou se está vazio
         if nome[i] != " ":
             vazio = False
         i += 1
+
     if vazio:
         return False
-
+    
     i = 0
-    while i < len(nome):
+    while i < len(nome): #verificando se o nome na posição i não tem números.
         letra = nome[i]
         if not ((letra >= "A" and letra <= "Z") or (letra >= "a" and letra <= "z") or letra == " "):
             return False
         i += 1
     return True
 
-def verificar_data_de_nascimento_cliente(nascimento):
-    if len(nascimento) != 10:
+def verificar_data_de_nascimento_cliente(nascimento): #verificação da data de nascimento
+    if len(nascimento) != 10: #a quantidade de caracteres do nascimento tem que ser 10, se não for vai retornar falso.
         return False
     
-    if nascimento[2] != "/" or nascimento[5] != "/":
+    if nascimento[2] != "/" or nascimento[5] != "/": #se no index 2 não estiver / ou no index 5 não estiver / retorna falso.
         return False
 
     i = 0
     while i < len(nascimento):
-        if i != 2 and i != 5: 
-            if nascimento[i] < "0" or nascimento[i] > "9":
+        if i != 2 and i != 5: #se a posição não for 2 ou não for 5 ele passa para a proxima verificação, porque nessas posições estão a /
+            if nascimento[i] < "0" or nascimento[i] > "9": # se for menor que 0 ou maior que 9 retorna falso
                 return False
         i += 1
 
@@ -149,81 +153,111 @@ def verificar_endereco(endereco):
     #está verificando se o endereço não está totalmente  vazio
     vazio = True
     i = 0
-    while i < len(endereco):
+    while i < len(endereco): #enquanto o tamanho do endereço de valor i fora diferente que espaço, o vazio que é verdadeiro retorna falso.
         if endereco[i] != " ":
             vazio = False
         i += 1
 
-    if vazio:
+    if vazio: #se estiver totalmente vazio ele vai retornar falso.
         return False
     
-    #aqui ele esta verificando se tem pelo menos uma letra ou numero no endereço
-    tem_caractere_valido = False
+    tem_letra = False #como o endereço precisa ter número e letra, criei duas variaveis para fazer essa verificação
+    tem_numero = False
     i = 0
+
     while i < len(endereco):
-        letra = endereco[i]
-        if (letra >= "A" and letra <= "Z") or (letra >= "a" and letra <= "z") or (letra >= "0" and letra <= "9"):
-            tem_caractere_valido = True
+        if (endereco[i] >= "A" and endereco[i] <= "Z") or (endereco[i] >= "a" and endereco[i] <= "z"):
+            tem_letra = True
+
+        if endereco[i] >= "0" and endereco[i] <= "9":
+            tem_numero = True
+
         i += 1
 
-    if tem_caractere_valido == False:
+    if not tem_letra or not tem_numero: #se não tiver letra e número retorna falso.
         return False
-
     return True
 
-
-def imprimir_cliente_formatado(cpf, dicionario_clientes):
-    cliente = dicionario_clientes[cpf]
+def imprimir_cliente_formatado(cpf, dicionario_clientes): #funçao para imprimir os dados do cliente
+    cliente = dicionario_clientes[cpf]  # pega dentro do dicionário o cliente que tem esse CPF
 
     print(Fore.CYAN + "\n\tDados cadastrados:")
-    print(Fore.WHITE + "\tNome: " + cliente["Nome"])
-    print(Fore.WHITE + "\tCPF: " + cpf)
+    print(Fore.WHITE + "\tNome: " + cliente["Nome"])  # imprime o valor da chave "Nome" do dicionário do cliente
+    print(Fore.WHITE + "\tCPF: " + cpf) #está imprimindo o cpf que foi passado como parâmetro 
     print(Fore.WHITE + "\tData de Nascimento: " + cliente["Data de Nascimento"])
-    print(Fore.WHITE + "\tEndereço: " + cliente["Endereco"])
+    print(Fore.WHITE + "\tEndereço: " + cliente["Endereco"]) # imprime o endereço que está salvo no dicionário do cliente
 
-    if cliente["Telefone Fixo"] != []:  #se não estiver vazia
+    if cliente["Telefone Fixo"]  != []:  #se não tiver vazia vai printar o primeiro número cadastrado.
         print(Fore.WHITE + "\tTelefone Fixo: " + cliente["Telefone Fixo"][0])
     else:
-        print(Fore.WHITE + "\tTelefone Fixo: (nenhum cadastrado)")
+        print(Fore.WHITE + "\tTelefone Fixo: (nenhum cadastrado)") #Essa mensagem vai ser impressa caso o usuário excluir o telefone fixo e imprimir o relatório do cliente x.
 
-    if cliente["Telefone Celular"] != []:  #se não estiver vazia
+    if cliente["Telefone Celular"] != []:
         print(Fore.WHITE + "\tTelefone Celular: " + cliente["Telefone Celular"][0])
     else:
         print(Fore.WHITE + "\tTelefone Celular: (nenhum cadastrado)")
 
 
 def excluir_telefone(cpf, dic_clientes, tipo_telefone, telefone):
-    if tipo_telefone == "fixo":
+    #função recebe o cpf do cliente, o dicionário, o tipo de telefone e o número que será excluído.
+
+    if tipo_telefone == "fixo": # está definindo qual chave será usada no dicionário
         telefone_key = "Telefone Fixo"
     elif tipo_telefone == "celular":
         telefone_key = "Telefone Celular"
     else:
+        # Se o usuário digitar algo diferente de "fixo" ou "celular"
         return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone inválido."
+    
+    if telefone_key in dic_clientes[cpf]:  #verifica se o cliente possui esse tipo de telefone cadastrado
 
-    if telefone_key in dic_clientes[cpf]:
+        # Verifica se o número realmente está na lista daquele tipo
         if telefone in dic_clientes[cpf][telefone_key]:
-            dic_clientes[cpf][telefone_key].remove(telefone)
+            
+            dic_clientes[cpf][telefone_key].remove(telefone)#remove o número da lista
+
             return Style.BRIGHT + Fore.GREEN + "\tTelefone excluído com sucesso!"
+
         else:
             return Style.BRIGHT + Fore.RED + "\tERRO! Número de telefone não encontrado."
+    
     else:
+        #caso o cliente não conter telefone desse tipo
         return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone não cadastrado para este cliente."
 
-def buscar_cliente_por_cpf(cpf, dic_clientes):
-    if cpf in dic_clientes:
-        for i in dic_clientes[cpf]:
-            print(f"\t{i}: {dic_clientes[cpf][i]}")
+
+def buscar_cliente_por_cpf(cpf, dic_clientes): #buscando o cpf do cliente que recebe como parâmetro o cpf e dicionário.
+    if cpf in dic_clientes:  #verifica se o CPF existe no dicionário
+        for i in dic_clientes[cpf]: # percorre cada chave do cliente
+            print(f"\t{i}: {dic_clientes[cpf][i]}")# imprime a chave e o valor correspondente variàvel i 
         return True 
     else:
         return False
 
-def adicionar_telefone(cpf, dic_clientes, tipo_telefone, telefone):
-    if tipo_telefone == "fixo":
+def adicionar_telefone(cpf, dic_clientes, tipo_telefone, telefone): #função que verifica
+    
+    if tipo_telefone == "fixo":    
+        #verifica se o telefone contém apenas números
+        i = 0
+        while i < len(telefone):
+            if telefone[i] < "0" or telefone[i] > "9":  # se não for número
+                return Style.BRIGHT + Fore.RED + "\tERRO! O telefone deve conter apenas números."
+            i += 1
+
+        #se deu tudo certo manda para a função "adicionar_telefone_fixo"
         return adicionar_telefone_fixo(cpf, dic_clientes, telefone)
+
     elif tipo_telefone == "celular":
+        i = 0
+        while i < len(telefone):
+            if telefone[i] < "0" or telefone[i] > "9":
+                return Style.BRIGHT + Fore.RED + "\tERRO! O telefone deve conter apenas números."
+            i += 1
+        
         return adicionar_telefone_celular(cpf, dic_clientes, telefone)
+
     else:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone inválido."    
+        return Style.BRIGHT + Fore.RED + "\tERRO! Tipo de telefone inválido."
 
 
 def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
@@ -231,14 +265,14 @@ def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
         dic_clientes[cpf]["Telefone Fixo"] = []
 
     
-    if telefone_fixo in dic_clientes[cpf]["Telefone Fixo"]:
+    if telefone_fixo in dic_clientes[cpf]["Telefone Fixo"]: #se o telefone fixo já estiver nas informações daquele cliente retorna uma mensagem de erro
         return Style.BRIGHT + Fore.RED + "\tERRO! Número já adicionado."
     else:
-        dic_clientes[cpf]["Telefone Fixo"].append(telefone_fixo)
+        dic_clientes[cpf]["Telefone Fixo"].append(telefone_fixo) # adiciona o telefone dentro da lista "Telefone Fixo" desse cliente
         return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
     
-def adicionar_telefone_celular(cpf, dic_clientes, telefone_celular):
-    if "Telefone Celular" not in dic_clientes[cpf]:
+def adicionar_telefone_celular(cpf, dic_clientes, telefone_celular): #função que realmente adiciona o número celular no cadastro do cliente
+    if "Telefone Celular" not in dic_clientes[cpf]: #se o cliente ainda não tem a lista "Telefone Celular", cria uma lista vazia
         dic_clientes[cpf]["Telefone Celular"] = []
 
     
@@ -248,22 +282,75 @@ def adicionar_telefone_celular(cpf, dic_clientes, telefone_celular):
         dic_clientes[cpf]["Telefone Celular"].append(telefone_celular)
         return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
     
-def atualizar_cadastro(cpf, dic_clientes, campo, novo_valor):
-    if cpf in dic_clientes:
-        if campo in dic_clientes[cpf]:
-            dic_clientes[cpf][campo] = novo_valor
+def atualizar_cadastro(cpf, dic_clientes, campo, novo_valor): #função que atualiza o cadastro do cliente
+    if cpf in dic_clientes: #verifica se o cliente existe no dicionário
+        if campo in dic_clientes[cpf]:  #verifica se a chave informada (ex: Nome, Endereco...) existe no cadastro do cliente
+            dic_clientes[cpf][campo] = novo_valor  #atualiza o valor do campo com o novo valor informado
             return Style.BRIGHT + Fore.GREEN + "\tCadastro atualizado com sucesso!"
         else:
             return Style.BRIGHT + Fore.RED + "\tERRO! Campo inválido."
     else:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
+        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado." #se o cpf não existir no dicionário de clientes
     
-def excluir_cliente(cpf, dic_clientes):
-    if cpf in dic_clientes:
+def excluir_cliente(cpf, dic_clientes): #função que excluir  o cadastro do cliente
+    if cpf in dic_clientes: #se o cpf estiver no dicionário, deleta.
         del dic_clientes[cpf]
         return Style.BRIGHT + Fore.GREEN + "\tCliente excluído com sucesso!"
     else:
         return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
+    
+def inicializar_arquivo_clientes():
+    try:
+        # cria o arquivo se ele não existir
+        open("clientes.txt", "x").close()
+    except FileExistsError:
+        pass  # se já existir, não faz nada
+
+def carregar_clientes():
+    clientes = {}
+    try:
+        with open("clientes.txt", "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                linha = linha.strip()
+                if linha == "":
+                    continue  # ignora linhas vazias
+
+                # separa os campos do cliente
+                campos = linha.split(";")
+                cpf = campos[0]
+
+                clientes[cpf] = {
+                    "Nome": campos[1],
+                    "Data de Nascimento": campos[2],
+                    "Endereco": campos[3],
+                    "Telefone Fixo": [campos[4]],
+                    "Telefone Celular": [campos[5]]
+                }
+    except FileNotFoundError:
+        pass
+
+    return clientes
+
+def salvar_cliente_arquivo(cpf, cliente_dict):
+    with open("clientes.txt", "a", encoding="utf-8") as arquivo:
+        linha = (
+            f"{cpf};"
+            f"{cliente_dict['Nome']};"
+            f"{cliente_dict['Data de Nascimento']};"
+            f"{cliente_dict['Endereco']};"
+            f"{cliente_dict['Telefone Fixo'][0]};"
+            f"{cliente_dict['Telefone Celular'][0]}\n"
+        )
+        arquivo.write(linha)
+
+def remover_cliente_arquivo(cpf_remover):
+    with open("clientes.txt", "r", encoding="utf-8") as arquivo:
+        linhas = arquivo.readlines()
+
+    with open("clientes.txt", "w", encoding="utf-8") as arquivo:
+        for linha in linhas:
+            if not linha.startswith(cpf_remover + ";"):
+                arquivo.write(linha)
 
 # ---------FUNÇÕES DAS OPÇÕES DO SUBMENU VEICULOS--------- 
 # Validando o código do veículo
@@ -382,6 +469,7 @@ def remover_veiculos(codigo_remover, Carros):
                 return Style.BRIGHT + Fore.GREEN + "\tVeículo removido com sucesso!"
         except ValueError:
             return Style.BRIGHT + Fore.RED + "\tCódigo inválido."
+        
 ## ---------FUNÇÕES PARA BUSCAR O VEICULO VINCULADO AO CODIGO DISPONIBILIZADO---------
 def buscar_veiculos_por_codigo(buscar_codigo, Carros):
     if buscar_codigo not in Carros:
@@ -470,46 +558,6 @@ def inserindoRelatorio(Carros):
             arq.write("\n")
         arq.close()
         return True
-
-def adicionar_telefone_fixo(cpf, dic_clientes, telefone_fixo):
-    if "Telefone Fixo" not in dic_clientes[cpf]:
-        dic_clientes[cpf]["Telefone Fixo"] = []
-
-    
-    if telefone_fixo in dic_clientes[cpf]["Telefone Fixo"]:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Número já adicionado."
-    else:
-        dic_clientes[cpf]["Telefone Fixo"].append(telefone_fixo)
-        return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
-    
-def adicionar_telefone_celular(cpf, dic_clientes, telefone_celular):
-    if "Telefone Celular" not in dic_clientes[cpf]:
-        dic_clientes[cpf]["Telefone Celular"] = []
-
-    
-    if telefone_celular in dic_clientes[cpf]["Telefone Celular"]:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Número já adicionado."
-    else:
-        dic_clientes[cpf]["Telefone Celular"].append(telefone_celular)
-        return Style.BRIGHT + Fore.GREEN + "\tTelefone cadastrado com sucesso!"
-    
-def atualizar_cadastro(cpf, dic_clientes, campo, novo_valor):
-    if cpf in dic_clientes:
-        if campo in dic_clientes[cpf]:
-            dic_clientes[cpf][campo] = novo_valor
-            return Style.BRIGHT + Fore.GREEN + "\tCadastro atualizado com sucesso!"
-        else:
-            return Style.BRIGHT + Fore.RED + "\tERRO! Campo inválido."
-    else:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
-    
-def excluir_cliente(cpf, dic_clientes):
-    if cpf in dic_clientes:
-        del dic_clientes[cpf]
-        return Style.BRIGHT + Fore.GREEN + "\tCliente excluído com sucesso!"
-    else:
-        return Style.BRIGHT + Fore.RED + "\tERRO! Cliente não encontrado."
-
 ############################## Parte do Aluguel de carros ##############################
 
 def calendario():
@@ -595,6 +643,7 @@ def remover_aluguel(codigo_aluguel_remover, Agendamentos, Agendamentos_Desativad
                 return Style.BRIGHT + Fore.GREEN + "\tAluguel removido com sucesso!"
         except ValueError:
             return Style.BRIGHT + Fore.RED + "\tAlgo de errado aconteceu. Tente novamente."
+        
 def buscar_aluguel_por_codigo(codigo_aluguel_buscar, Agendamentos):
     if codigo_aluguel_buscar not in Agendamentos:
         print(Style.BRIGHT + Fore.RED + "\tCódigo de aluguel não encontrado.")
@@ -606,15 +655,216 @@ def buscar_aluguel_por_codigo(codigo_aluguel_buscar, Agendamentos):
         except ValueError:
             print(Style.BRIGHT + Fore.RED + "\tAlgo de errado aconteceu. Tente novamente.")
 
+
+def atualizar_aluguel(codigo_aluguel_atualizar, Agendamentos): #função para atualizar o aluguel
+    if codigo_aluguel_atualizar not in Agendamentos: #verificando se o código do aluguel existe no dicionário
+        return Style.BRIGHT + Fore.RED + "\tCódigo de aluguel não encontrado."
+    
+    try:
+        print(Style.BRIGHT + Fore.YELLOW + f"\n\tInformações do aluguel com o código {codigo_aluguel_atualizar} a ser atualizado:")
+        for mostrar_Informacao in Agendamentos[codigo_aluguel_atualizar]: #percorrendo as chaves do dicionário do aluguel
+            print(Style.BRIGHT + Fore.WHITE + 
+                  f"\t{mostrar_Informacao.capitalize()}: {Agendamentos[codigo_aluguel_atualizar][mostrar_Informacao]}") #imprime as informações do aluguel
+        
+        print(Style.BRIGHT + Fore.CYAN + "\n\tDigite os novos dados do aluguel (deixe em branco para manter o valor atual):")
+
+        data_inicio = input(Style.BRIGHT + Fore.WHITE + "\tNova Data de Início (DD/MM/AAAA): ")
+        data_fim = input(Style.BRIGHT + Fore.WHITE + "\tNova Data de Fim (DD/MM/AAAA): ")
+
+        #continua a mesma coisa se o usuário deixar em branco
+        if data_inicio.strip() == "":
+            data_inicio = Agendamentos[codigo_aluguel_atualizar]["Data Início"]
+        if data_fim.strip() == "":
+            data_fim = Agendamentos[codigo_aluguel_atualizar]["Data Fim"]
+
+        #validação 
+        if not validar_data_aluguel(data_inicio, data_fim, Agendamentos):
+            return Style.BRIGHT + Fore.RED + "\tDatas inválidas. Atualização cancelada."
+
+        #Atualizando as datas no dicionário
+        Agendamentos[codigo_aluguel_atualizar]["Data Início"] = data_inicio
+        Agendamentos[codigo_aluguel_atualizar]["Data Fim"] = data_fim
+
+        return Style.BRIGHT + Fore.GREEN + "\tAluguel atualizado com sucesso!"
+
+    except Exception:
+        return Style.BRIGHT + Fore.RED + "\tAlgo de errado aconteceu. Tente novamente."
+
+# ---------FUNÇÕES PARA LISTAR OS ALUGUEIS---------
+        
+def listar_alugueis(Agendamentos): #função para listar os aluguéis ativos
+    if len(Agendamentos) == 0: #se o dicionário estiver vazio
+        print(Style.BRIGHT + Fore.RED + "\n\tNenhum aluguel registrado no momento.")
+    else:
+        print(Style.BRIGHT + Fore.CYAN + "\n\tLista de aluguéis registrados:") #se não estiver vazio imprime as informações
+        for codigo in Agendamentos: #percorrendo os códigos dos aluguéis
+            print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo do Aluguel: {codigo}")
+            for mostrar_Informacao in Agendamentos[codigo]:
+                print(Style.BRIGHT + Fore.WHITE + f"\t{mostrar_Informacao.capitalize()}: {Agendamentos[codigo][mostrar_Informacao]}")
+
+def listar_historico_alugueis(Agendamentos_Desativados): #função para listar os aluguéis desativados
+    if len(Agendamentos_Desativados) == 0: #se o dicionário estiver vazio
+        print(Style.BRIGHT + Fore.RED + "\n\tNenhum aluguel desativado no momento.")
+    else:
+        print(Style.BRIGHT + Fore.CYAN + "\n\tLista de aluguéis desativados:")
+        for codigo in Agendamentos_Desativados:
+            print(Style.BRIGHT + Fore.WHITE + f"\n\tCódigo do Aluguel: {codigo}") #imprimindo o código do aluguel desativado
+            for mostrar_Informacao in Agendamentos_Desativados[codigo]:
+                print(Style.BRIGHT + Fore.WHITE + f"\t{mostrar_Informacao.capitalize()}: {Agendamentos_Desativados[codigo][mostrar_Informacao]}")       
+
+ #---------FUNÇÕES PARA GERAR RELATÓRIOS---------
+
+def relatorio_reservas_periodo(Agendamentos, data_inicio, data_fim, dicionario_clientes):
+    from datetime import datetime
+
+    try:
+        inicio = datetime.strptime(data_inicio, "%d/%m/%Y")
+        fim = datetime.strptime(data_fim, "%d/%m/%Y")
+    except:
+        print(Fore.RED + "\tDatas inválidas.")
+        return
+
+    encontrou = False
+    print(Style.BRIGHT + Fore.CYAN + f"\n\tReservas entre {data_inicio} e {data_fim}\n")
+
+    for codigo in Agendamentos:
+        data_aluguel = datetime.strptime(Agendamentos[codigo]["Data Início"], "%d/%m/%Y")
+
+        if inicio <= data_aluguel <= fim:
+            encontrou = True
+            cpf = Agendamentos[codigo]["CPF Cliente"]
+            nome = dicionario_clientes[cpf]["Nome"] if cpf in dicionario_clientes else "Nome não encontrado"
+
+            print(Fore.WHITE + f"\tCódigo do Aluguel: {codigo}")
+            print(f"\tCPF: {cpf}")
+            print(f"\tNome: {nome}")
+            for campo in Agendamentos[codigo]:
+                print(f"\t{campo}: {Agendamentos[codigo][campo]}")
+            print()
+
+    if not encontrou:
+        print(Fore.RED + "\tNenhuma reserva encontrada no período.")
+
+
+def relatorio_reservas_por_veiculo(Agendamentos, codigo_veiculo):
+    encontrou = False
+    print(Style.BRIGHT + Fore.CYAN + f"\n\tReservas do Veículo {codigo_veiculo}\n")
+
+    for codigo in Agendamentos:
+        if Agendamentos[codigo]["Codigo Veículo"] == codigo_veiculo:
+            encontrou = True
+            print(Fore.WHITE + f"\tCódigo do Aluguel: {codigo}")
+            for campo in Agendamentos[codigo]:
+                print(f"\t{campo}: {Agendamentos[codigo][campo]}")
+            print()
+
+    if not encontrou:
+        print(Fore.RED + "\tNenhuma reserva encontrada para este veículo.")
+
+
+def relatorio_reservas_por_cpf(Agendamentos, cpf):
+    encontrou = False
+    print(Style.BRIGHT + Fore.CYAN + f"\n\tReservas do CPF: {cpf}\n")
+
+    for codigo in Agendamentos:
+        if Agendamentos[codigo]["CPF Cliente"] == cpf:
+            encontrou = True
+            print(Fore.WHITE + f"\tCódigo: {codigo}")
+            for campo in Agendamentos[codigo]:
+                print(f"\t{campo}: {Agendamentos[codigo][campo]}")
+            print()
+
+    if not encontrou:
+        print(Fore.RED + "\tNenhuma reserva encontrada para este CPF.")
+
+def relatorio_alugueis(Agendamentos):
+    caminho = "Relatorio_Alugueis.txt"
+    arq = open(caminho,"w",encoding="utf-8")
+    if exiteArquivo(caminho):
+        for chave in Agendamentos:
+            arq.write(f"Código do Aluguel: {chave};\n")
+            for conteudo in Agendamentos[chave]:
+                arq.write(f"{conteudo.capitalize()}: {Agendamentos[chave][conteudo]};\n")
+            arq.write("\n")
+        arq.close()
+        return True
+    
+def relatorio_veeiculos(Carros):
+    caminho = "Relatorio_Veiculos.txt"
+    arq = open(caminho,"w",encoding="utf-8")
+    if exiteArquivo(caminho):
+        for chave in Carros:
+            arq.write(f"Código: {chave};\n")
+            for conteudo in Carros[chave]:
+                arq.write(f"{conteudo.capitalize()}: {Carros[chave][conteudo]};\n")
+            arq.write("\n")
+        arq.close()
+        return True
+    
+def relatorio_clientes(dicionario_clientes):
+    caminho = "Relatorio_Clientes.txt"
+    arq = open(caminho,"w",encoding="utf-8")
+    if exiteArquivo(caminho):
+        for chave in dicionario_clientes:
+            arq.write(f"CPF: {chave};\n")
+            for conteudo in dicionario_clientes[chave]:
+                arq.write(f"{conteudo}: {dicionario_clientes[chave][conteudo]};\n")
+            arq.write("\n")
+        arq.close()
+        return True
+    
+def inicializar_arquivo_alugueis():
+    try:
+        open("alugueis.txt", "x").close()  # cria se não existir
+    except FileExistsError:
+        pass
+
+def salvar_aluguel_arquivo(codigo, aluguel_dict):
+    with open("alugueis.txt", "a", encoding="utf-8") as arq:
+        linha = (
+            f"{codigo};"
+            f"{aluguel_dict['CPF Cliente']};"
+            f"{aluguel_dict['Codigo Veículo']};"
+            f"{aluguel_dict['Data Início']};"
+            f"{aluguel_dict['Data Fim']}\n"
+        )
+        arq.write(linha)
+
+def carregar_alugueis():
+    alugueis = {}
+    try:
+        with open("alugueis.txt", "r", encoding="utf-8") as arquivo:
+            for linha in arquivo:
+                linha = linha.strip()
+                if linha == "":
+                    continue
+
+                campos = linha.split(";")
+                codigo = campos[0]
+
+                alugueis[codigo] = {
+                    "CPF Cliente": campos[1],
+                    "Codigo Veículo": campos[2],
+                    "Data Início": campos[3],
+                    "Data Fim": campos[4]
+                }
+    except FileNotFoundError:
+        pass
+
+    return alugueis
+
+
+
 def main(): #onde tudo irá acontecer
-    inicio = ""
+   inicio = ""
+   
+   dicionario_clientes = {} # dicionário para armazenar os clientes
+   Carros = {} # dicionário para armazenar os carros
+   inicializar_arquivo_alugueis()
+   Agendamentos = carregar_alugueis()
+   Agendamentos_Desativados = {} # dicionário para armazenar os agendamentos desativados
 
-    dicionario_clientes = {} # dicionário para armazenar os clientes
-    Carros = {} # dicionário para armazenar os carros
-    Agendamentos = {} # dicionário para armazenar os agendamentos
-    Agendamentos_Desativados = {} # dicionário para armazenar os agendamentos desativados
-
-    while inicio != "n":
+   while inicio != "n":
         inicio = inicio_do_menu_()
 
         if inicio == "s":
@@ -696,6 +946,7 @@ def main(): #onde tudo irá acontecer
                                 else:
                                     print(Fore.RED + "\tTelefone celular inválido!")
 
+
                             #ele só cria e adiciona o cliente no dicionário aqui
                             dicionario_clientes[cpf] = {
                                 "Nome": nome,
@@ -704,6 +955,9 @@ def main(): #onde tudo irá acontecer
                                 "Telefone Fixo": [tel_fixo],
                                 "Telefone Celular": [tel_cel]
                             }
+
+                            salvar_cliente_arquivo(cpf, dicionario_clientes[cpf])
+
 
                             print(Fore.GREEN + "\n\tCliente cadastrado com sucesso!")
                             imprimir_cliente_formatado(cpf, dicionario_clientes)
@@ -780,6 +1034,7 @@ def main(): #onde tudo irá acontecer
                                     confirmacao = input("\tTem certeza que deseja excluir este cliente? (s/n): ").lower()
                                     if confirmacao == "s":
                                         resultado = excluir_cliente(buscar_cliente, dicionario_clientes)
+                                        remover_cliente_arquivo(buscar_cliente)
                                         print(resultado)
                                     else:
                                         print(Fore.YELLOW + "\n\tExclusão cancelada.")
@@ -1023,11 +1278,13 @@ def main(): #onde tudo irá acontecer
                             codigo_aluguel_buscar = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o código do aluguel que deseja buscar: ")
                             buscar_aluguel_por_codigo(codigo_aluguel_buscar, Agendamentos)
                         elif alugueis_submenu == 4:
-                            print()
+                            codigo_aluguel_atualizar = input(Style.BRIGHT + Fore.WHITE + "\n\tDigite o código do aluguel que deseja atualizar: ")
+                            mensagem_atualizar_aluguel = atualizar_aluguel(codigo_aluguel_atualizar, Agendamentos)
+                            print(mensagem_atualizar_aluguel)
                         elif alugueis_submenu == 5:
-                            print()
+                            listar_alugueis(Agendamentos)
                         elif alugueis_submenu == 6:
-                            print()
+                            listar_historico_alugueis(Agendamentos_Desativados)
                         elif alugueis_submenu == 7:
                             print(Fore.YELLOW + "\tVoltando...")
                         else:
@@ -1040,11 +1297,17 @@ def main(): #onde tudo irá acontecer
                         relatorio_submenu = submenu_relatorio()
 
                         if relatorio_submenu == 1:
-                            print()
+                            cpf = input("\tDigite o CPF: ")
+                            relatorio_reservas_por_cpf(Agendamentos, cpf)
+
                         elif relatorio_submenu == 2:
-                            print()
+                            cod = input("\tDigite o código do veículo: ")
+                            relatorio_reservas_por_veiculo(Agendamentos, cod)
+
                         elif relatorio_submenu == 3:
-                            print()
+                            di = input("\tData início (DD/MM/AAAA): ")
+                            df = input("\tData fim (DD/MM/AAAA): ")
+                            relatorio_reservas_periodo(Agendamentos, di, df, dicionario_clientes)
                         elif relatorio_submenu == 4:
                             print(Fore.YELLOW + "\tVoltando...")
                         else:
