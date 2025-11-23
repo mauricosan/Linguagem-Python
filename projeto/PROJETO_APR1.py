@@ -1346,5 +1346,4 @@ def main(): #onde tudo irá acontecer
             print(Style.BRIGHT + Fore.YELLOW + "\n\tEncerrando Programa...")
             print(Fore.BLACK + Style.BRIGHT + "\tPrograma Encerrado.")
 
-if __name__ == "__main__":
-    main()
+main()
